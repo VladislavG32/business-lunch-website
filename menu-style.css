@@ -1,4 +1,3 @@
-
 /* Сетка для блока с блюдами */
 .dishes-grid {
     display: grid;
@@ -208,5 +207,5 @@
     
     .menu-section h2 {
         text-align: center;
-    }
+    }  
 }
