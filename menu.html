@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Собрать ланч – Вкусные бизнес-ланчи</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="menu-style.css">
+    <link rel="stylesheet" href="form-style.css">
+</head>
+<body>
+    <header>
+        <h1>Собрать ланч</h1>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="menu.html" id="active">Собрать ланч</a>
+            <a href="#">Корзина</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Секция супов -->
+        <section class="menu-section">
+            <h2>Супы</h2>
+            <div class="dishes-grid">
+                <!-- Карточки будут созданы JavaScript -->
+            </div>
+        </section>
+
+        <!-- Секция главных блюд -->
+        <section class="menu-section">
+            <h2>Главные блюда</h2>
+            <div class="dishes-grid">
+                <!-- Карточки будут созданы JavaScript -->
+            </div>
+        </section>
+
+        <!-- Секция напитков -->
+        <section class="menu-section">
+            <h2>Напитки</h2>
+            <div class="dishes-grid">
+                <!-- Карточки будут созданы JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <section class="order-form-section">
+        <h2>Оформление заказа</h2>
+        <form id="order-form" action="https://httpbin.org/post" method="POST">
+
+            <!-- Блок с заказом клиента -->
+            <div class="form-columns">
+                <div class="order-column">
+                    <h3>Ваш заказ</h3>
+                    
+                    <!-- Сообщение когда ничего не выбрано -->
+                    <div id="empty-order-message" style="text-align: center; color: #666; padding: 20px;">
+                        Ничего не выбрано
+                    </div>
+                    
+                    <!-- Блок с выбранными блюдами -->
+                    <div id="order-summary" style="display: none;">
+                        <div class="order-category">
+                            <strong>Суп:</strong>
+                            <span id="selected-soup">Блюдо не выбрано</span>
+                        </div>
+                        
+                        <div class="order-category">
+                            <strong>Главное блюдо:</strong>
+                            <span id="selected-main">Блюдо не выбрано</span>
+                        </div>
+                        
+                        <div class="order-category">
+                            <strong>Напиток:</strong>
+                            <span id="selected-drink">Напиток не выбран</span>
+                        </div>
+                        
+                        <div class="order-total" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #ff7f50;">
+                            <strong>Стоимость заказа:</strong>
+                            <span id="order-total" style="font-size: 1.2em; color: #ff7f50;">0 ₽</span>
+                        </div>
+                    </div>
+                    
+                    <label for="comment">Комментарий к заказу</label>
+                    <textarea id="comment" name="comment" rows="4" placeholder="Ваши пожелания..."></textarea>
+                </div>
+                <!-- Конец блока с заказом -->
+
+                <!-- Блок с данными клиента -->
+                <div class="client-column">
+                    <h3>Данные для доставки</h3>
+
+                    <label for="client-name">Имя *</label>
+                    <input type="text" id="client-name" name="client_name" required>
+
+                    <label for="client-email">Email *</label>
+                    <input type="email" id="client-email" name="client_email" required>
+
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="subscribe" name="subscribe" checked>
+                        <label for="subscribe">Подписаться на рассылку</label>
+                    </div>
+
+                    <label for="client-phone">Телефон *</label>
+                    <input type="tel" id="client-phone" name="client_phone" required>
+
+                    <label for="client-address">Адрес доставки *</label>
+                    <input type="text" id="client-address" name="client_address" required>
+
+                    <fieldset>
+                        <legend>Время доставки *</legend>
+                        <div class="radio-wrapper">
+                            <input type="radio" id="time-asap" name="delivery_time_type" value="asap" required>
+                            <label for="time-asap">Как можно скорее</label>
+                        </div>
+                        <div class="radio-wrapper">
+                            <input type="radio" id="time-specific" name="delivery_time_type" value="specific">
+                            <label for="time-specific">Ко времени</label>
+                        </div>
+                    </fieldset>
+
+                    <label for="delivery-time">Укажите время доставки</label>
+                    <input type="time" id="delivery-time" name="delivery_time" 
+                        min="07:00" max="23:00" step="300"
+                        placeholder="Выберите время">
+
+                    <div class="form-buttons">
+                        <button type="reset">Сбросить</button>
+                        <button type="submit">Отправить заказ</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <footer id="contacts">
+        <h2>Контакты</h2>
+        <p>г. Москва</p>
+        <p>Телефон: <a href="tel:+79000000000">+7 (900) 000-00-00</a></p>
+        <p>Email: <a href="mailto:order@lunch.ru">order@lunch.ru</a></p>
+    </footer>
+
+    <!-- Подключение JavaScript файлов В КОНЦЕ -->
+    <script src="dishes-data.js"></script>
+    <script src="display-dishes.js"></script>
+    <script src="order-manager.js"></script>
+</body>
+</html>

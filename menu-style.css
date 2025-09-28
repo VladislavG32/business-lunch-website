@@ -1,0 +1,112 @@
+/* Сетка для блока с блюдами */
+.dishes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+/* Карточка блюда */
+.dish-card {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 40px;
+    border-radius: 35px;
+    cursor: pointer;
+    filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.13));
+    background-color: white;
+}
+
+/* Эффекты при наведении на карточку */
+.dish-card:hover {
+    border: 2px solid tomato;
+}
+
+.dish-card:hover button {
+    background-color: tomato;
+    color: white;
+}
+
+/* Изображение блюда */
+.dish-card img {
+    width: 100%;
+    border-radius: 35px;
+    margin-bottom: 15px;
+}
+
+/* Цена блюда */
+.dish-card .price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Название блюда */
+.dish-card .name {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+/* Вес/объем блюда */
+.dish-card .weight {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* Кнопка добавления */
+.dish-card button {
+    background-color: #f1eee9;
+    padding: 10px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    margin-top: auto;
+}
+
+
+/* Адаптивность для страницы меню */
+@media (max-width: 800px) {
+    .dishes-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    nav {
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        text-align: center;
+    }
+    
+    .dishes-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    nav {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    nav a {
+        font-size: calc(1.1rem + 4px);
+    }
+    
+    .menu-section h2 {
+        text-align: center;
+    }
+}
+
+/* Стили для выделенной карточки блюда */
+.dish-card.selected {
+    border: 2px solid tomato !important;
+    background-color: #fff8f6 !important;
+    transform: scale(1.02);
+    transition: all 0.3s ease;
+}
+
+.dish-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
