@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -21,46 +20,77 @@
     </header>
 
     <main>
-        <!-- Секция супов -->
         <section class="menu-section">
-            <h2>Супы</h2>
+            <h2>Выберите суп</h2>
+            <div class="filters" data-category="soup">
+                <button class="filter-btn active" data-kind="all">Все</button>
+                <button class="filter-btn" data-kind="fish">рыбный</button>
+                <button class="filter-btn" data-kind="meat">мясной</button>
+                <button class="filter-btn" data-kind="veg">вегетарианский</button>
+            </div>
             <div class="dishes-grid">
-                <!-- Карточки будут созданы JavaScript -->
             </div>
         </section>
 
-        <!-- Секция главных блюд -->
         <section class="menu-section">
-            <h2>Главные блюда</h2>
+            <h2>Выберите главное блюдо</h2>
+            <div class="filters" data-category="main">
+                <button class="filter-btn active" data-kind="all">Все</button>
+                <button class="filter-btn" data-kind="fish">рыбное</button>
+                <button class="filter-btn" data-kind="meat">мясное</button>
+                <button class="filter-btn" data-kind="veg">вегетарианское</button>
+            </div>
             <div class="dishes-grid">
-                <!-- Карточки будут созданы JavaScript -->
             </div>
         </section>
 
-        <!-- Секция напитков -->
         <section class="menu-section">
-            <h2>Напитки</h2>
+            <h2>Выберите салат или стартер</h2>
+            <div class="filters" data-category="salad">
+                <button class="filter-btn active" data-kind="all">Все</button>
+                <button class="filter-btn" data-kind="fish">рыбный</button>
+                <button class="filter-btn" data-kind="meat">мясной</button>
+                <button class="filter-btn" data-kind="veg">вегетарианский</button>
+            </div>
             <div class="dishes-grid">
-                <!-- Карточки будут созданы JavaScript -->
+            </div>
+        </section>
+        <section class="menu-section">
+            <h2>Выберите напиток</h2>
+            <div class="filters" data-category="drink">
+                <button class="filter-btn active" data-kind="all">Все</button>
+                <button class="filter-btn" data-kind="cold">холодный</button>
+                <button class="filter-btn" data-kind="hot">горячий</button>
+            </div>
+            <div class="dishes-grid">
+            </div>
+        </section>
+
+        <section class="menu-section">
+            <h2>Выберите десерт</h2>
+            <div class="filters" data-category="dessert">
+                <button class="filter-btn active" data-kind="all">Все</button>
+                <button class="filter-btn" data-kind="small">маленькая порция</button>
+                <button class="filter-btn" data-kind="medium">средняя порция</button>
+                <button class="filter-btn" data-kind="large">большая порция</button>
+            </div>
+            <div class="dishes-grid">
             </div>
         </section>
     </main>
 
     <section class="order-form-section">
-        <h2>Оформление заказа</h2>
+        <h2>Сделать заказ</h2>
         <form id="order-form" action="https://httpbin.org/post" method="POST">
 
-            <!-- Блок с заказом клиента -->
             <div class="form-columns">
                 <div class="order-column">
                     <h3>Ваш заказ</h3>
                     
-                    <!-- Сообщение когда ничего не выбрано -->
                     <div id="empty-order-message" style="text-align: center; color: #666; padding: 20px;">
                         Ничего не выбрано
                     </div>
                     
-                    <!-- Блок с выбранными блюдами -->
                     <div id="order-summary" style="display: none;">
                         <div class="order-category">
                             <strong>Суп:</strong>
@@ -73,8 +103,18 @@
                         </div>
                         
                         <div class="order-category">
+                            <strong>Салат/стартер:</strong>
+                            <span id="selected-salad">Блюдо не выбрано</span>
+                        </div>
+                        
+                        <div class="order-category">
                             <strong>Напиток:</strong>
                             <span id="selected-drink">Напиток не выбран</span>
+                        </div>
+                        
+                        <div class="order-category">
+                            <strong>Десерт:</strong>
+                            <span id="selected-dessert">Десерт не выбран</span>
                         </div>
                         
                         <div class="order-total" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #ff7f50;">
@@ -83,41 +123,41 @@
                         </div>
                     </div>
                     
-                    <label for="comment">Комментарий к заказу</label>
+                    <label for="comment">Комментарии к заказу</label>
                     <textarea id="comment" name="comment" rows="4" placeholder="Ваши пожелания..."></textarea>
                 </div>
-                <!-- Конец блока с заказом -->
 
                 <!-- Блок с данными клиента -->
                 <div class="client-column">
-                    <h3>Данные для доставки</h3>
+                    <h3>Ваши данные</h3>
 
-                    <label for="client-name">Имя *</label>
+                    <label for="client-name">Имя</label>
                     <input type="text" id="client-name" name="client_name" required>
 
-                    <label for="client-email">Email *</label>
+                    <label for="client-email">Email</label>
                     <input type="email" id="client-email" name="client_email" required>
 
                     <div class="checkbox-wrapper">
                         <input type="checkbox" id="subscribe" name="subscribe" checked>
-                        <label for="subscribe">Подписаться на рассылку</label>
+                        <label for="subscribe">Получать информацию о скидках и акциях</label>
                     </div>
 
-                    <label for="client-phone">Телефон *</label>
+                    <label for="client-phone">Номер телефона</label>
                     <input type="tel" id="client-phone" name="client_phone" required>
 
-                    <label for="client-address">Адрес доставки *</label>
+                    <label for="client-address">Адрес доставки</label>
                     <input type="text" id="client-address" name="client_address" required>
+                    <small>Доставка осуществляется только по Москве</small>
 
                     <fieldset>
-                        <legend>Время доставки *</legend>
+                        <legend>Время доставки:</legend>
                         <div class="radio-wrapper">
                             <input type="radio" id="time-asap" name="delivery_time_type" value="asap" required>
                             <label for="time-asap">Как можно скорее</label>
                         </div>
                         <div class="radio-wrapper">
                             <input type="radio" id="time-specific" name="delivery_time_type" value="specific">
-                            <label for="time-specific">Ко времени</label>
+                            <label for="time-specific">К указанному времени</label>
                         </div>
                     </fieldset>
 
@@ -125,10 +165,11 @@
                     <input type="time" id="delivery-time" name="delivery_time" 
                         min="07:00" max="23:00" step="300"
                         placeholder="Выберите время">
+                    <small>Доступное время доставки с 7:00 до 23:00</small>
 
                     <div class="form-buttons">
                         <button type="reset">Сбросить</button>
-                        <button type="submit">Отправить заказ</button>
+                        <button type="submit">Отправить</button>
                     </div>
                 </div>
             </div>
@@ -142,9 +183,10 @@
         <p>Email: <a href="mailto:order@lunch.ru">order@lunch.ru</a></p>
     </footer>
 
-    <!-- Подключение JavaScript файлов В КОНЦЕ -->
+    <!-- Подключение JavaScript файлов -->
     <script src="dishes-data.js"></script>
     <script src="display-dishes.js"></script>
     <script src="order-manager.js"></script>
+    <script src="filter-dishes.js"></script>
 </body>
 </html>

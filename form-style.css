@@ -15,14 +15,12 @@
     text-align: center;
 }
 
-/* Разделение на две колонки */
 .form-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
 }
 
-/* Стили для каждой колонки */
 .order-column, .client-column {
     display: flex;
     flex-direction: column;
@@ -36,7 +34,6 @@
     padding-bottom: 0.5rem;
 }
 
-/* Стили для label */
 label {
     display: block;
     margin-bottom: 0.5rem;
@@ -44,7 +41,6 @@ label {
     color: #555;
 }
 
-/* Стили для полей ввода, селектов и textarea */
 select, input[type="text"], input[type="email"], input[type="tel"], input[type="time"], textarea {
     width: 100%;
     padding: 12px;
@@ -55,13 +51,11 @@ select, input[type="text"], input[type="email"], input[type="tel"], input[type="
     font-family: 'Roboto', sans-serif;
 }
 
-/* Стили для textarea */
 textarea {
     resize: vertical;
     min-height: 100px;
 }
 
-/* Стили для чекбокса и радиокнопок */
 .checkbox-wrapper, .radio-wrapper {
     display: flex;
     align-items: center;
@@ -79,7 +73,6 @@ textarea {
     font-weight: normal;
 }
 
-/* Стили для fieldset (группа радиокнопок) */
 fieldset {
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -93,7 +86,6 @@ legend {
     padding: 0 10px;
 }
 
-/* Стили для кнопок */
 .form-buttons {
     display: flex;
     gap: 15px;
@@ -111,7 +103,6 @@ legend {
     transition: background-color 0.3s ease;
 }
 
-/* Кнопка "Сбросить" */
 .form-buttons button[type="reset"] {
     background-color: #f1eee9;
     color: #333;
@@ -121,7 +112,6 @@ legend {
     background-color: #dcd8d1;
 }
 
-/* Кнопка "Отправить заказ" */
 .form-buttons button[type="submit"] {
     background-color: #ff7f50;
     color: white;
@@ -131,15 +121,6 @@ legend {
     background-color: #e67348;
 }
 
-/* Адаптивность для формы */
-@media (max-width: 768px) {
-    .form-columns {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-}
-
-/* Стили для блока "Ваш заказ" */
 .order-category {
     margin-bottom: 15px;
     padding: 10px;
@@ -153,7 +134,7 @@ legend {
     color: #333;
 }
 
-#selected-soup, #selected-main, #selected-drink {
+#selected-soup, #selected-main, #selected-salad, #selected-drink, #selected-dessert {
     color: #555;
 }
 
@@ -161,46 +142,21 @@ legend {
     font-size: 1.1em;
 }
 
-/* Стили для выделенной карточки блюда */
 .dish-card.selected {
     border: 2px solid tomato !important;
     background-color: #fff8f6 !important;
 }
 
-
-/* Стили для поля времени */
 input[type="time"] {
     font-family: 'Roboto', sans-serif;
 }
 
-/* Стили для disabled состояния */
 input[type="time"]:disabled {
     background-color: #f5f5f5;
     color: #999;
     cursor: not-allowed;
 }
 
-/* Стили для подсказки */
-small {
-    display: block;
-    color: #666;
-    margin-top: 5px;
-    font-size: 0.9em;
-}
-
-/* Стили для поля времени */
-input[type="time"] {
-    font-family: 'Roboto', sans-serif;
-}
-
-/* Стили для disabled состояния */
-input[type="time"]:disabled {
-    background-color: #f5f5f5;
-    color: #999;
-    cursor: not-allowed;
-}
-
-/* Стили для подсказки */
 small {
     display: block;
     color: #666;
@@ -209,7 +165,6 @@ small {
     line-height: 1.3;
 }
 
-/* Стили для сообщений о времени */
 .time-message {
     font-size: 0.8em;
     margin-top: 5px;
@@ -233,4 +188,19 @@ small {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .form-columns {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+    }
+    
+    .form-buttons button {
+        width: 100%;
+    }
 }

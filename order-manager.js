@@ -1,22 +1,23 @@
-// Объект для хранения выбранных блюд
 let selectedDishes = {
     soup: null,
     main: null,
-    drink: null
+    salad: null,
+    drink: null,
+    dessert: null
 };
 
-// Функция для обновления блока "Ваш заказ"
 function updateOrderSummary() {
     const orderSoup = document.getElementById('selected-soup');
     const orderMain = document.getElementById('selected-main');
+    const orderSalad = document.getElementById('selected-salad');
     const orderDrink = document.getElementById('selected-drink');
+    const orderDessert = document.getElementById('selected-dessert');
     const orderTotal = document.getElementById('order-total');
     const orderSummary = document.getElementById('order-summary');
     const emptyMessage = document.getElementById('empty-order-message');
     
     const selectedCount = Object.values(selectedDishes).filter(dish => dish !== null).length;
     
-    // Показываем/скрываем сообщение "Ничего не выбрано"
     if (selectedCount === 0) {
         orderSummary.style.display = 'none';
         emptyMessage.style.display = 'block';
@@ -24,13 +25,13 @@ function updateOrderSummary() {
         orderSummary.style.display = 'block';
         emptyMessage.style.display = 'none';
     }
-    
-    // Обновляем выбранные блюда
-    orderSoup.textContent = selectedDishes.soup ? `${selectedDishes.soup.name} - ${selectedDishes.soup.price} ₽` : 'Блюдо не выбрано';
-    orderMain.textContent = selectedDishes.main ? `${selectedDishes.main.name} - ${selectedDishes.main.price} ₽` : 'Блюдо не выбрано';
-    orderDrink.textContent = selectedDishes.drink ? `${selectedDishes.drink.name} - ${selectedDishes.drink.price} ₽` : 'Напиток не выбран';
-    
-    // Считаем общую стоимость
+
+    orderSoup.textContent = selectedDishes.soup ? `${selectedDishes.soup.name} ${selectedDishes.soup.price}Р` : 'Блюдо не выбрано';
+    orderMain.textContent = selectedDishes.main ? `${selectedDishes.main.name} ${selectedDishes.main.price}Р` : 'Блюдо не выбрано';
+    orderSalad.textContent = selectedDishes.salad ? `${selectedDishes.salad.name} ${selectedDishes.salad.price}Р` : 'Блюдо не выбрано';
+    orderDrink.textContent = selectedDishes.drink ? `${selectedDishes.drink.name} ${selectedDishes.drink.price}Р` : 'Напиток не выбран';
+    orderDessert.textContent = selectedDishes.dessert ? `${selectedDishes.dessert.name} ${selectedDishes.dessert.price}Р` : 'Десерт не выбран';
+
     let total = 0;
     Object.values(selectedDishes).forEach(dish => {
         if (dish) {
@@ -38,26 +39,21 @@ function updateOrderSummary() {
         }
     });
     
-    orderTotal.textContent = `${total} ₽`;
+    orderTotal.textContent = `${total}Р`;
 }
 
-// Функция для обработки клика по карточке блюда
 function handleDishClick(dishKeyword) {
-    console.log('Кликнули на блюдо:', dishKeyword); // Для отладки
+    console.log('Кликнули на блюдо:', dishKeyword); 
     
-    // Находим блюдо в массиве по keyword
     const selectedDish = dishes.find(dish => dish.keyword === dishKeyword);
     
     if (selectedDish) {
-        // Обновляем выбранное блюдо в соответствующей категории
         selectedDishes[selectedDish.category] = selectedDish;
         
-        // Обновляем отображение заказа
         updateOrderSummary();
-        
-        // Добавляем визуальную обратную связь
-        const allCards = document.querySelectorAll('.dish-card');
-        allCards.forEach(card => {
+
+        const allCardsInCategory = document.querySelectorAll(`.dish-card[data-category="${selectedDish.category}"]`);
+        allCardsInCategory.forEach(card => {
             card.classList.remove('selected');
         });
         
@@ -66,17 +62,14 @@ function handleDishClick(dishKeyword) {
             clickedCard.classList.add('selected');
         }
         
-        console.log('Выбрано блюдо:', selectedDish.name); // Для отладки
+        console.log('Выбрано блюдо:', selectedDish.name); 
     }
 }
 
-// Инициализация обработчиков событий
 function initEventListeners() {
-    // Ждем немного чтобы все карточки успели создаться
     setTimeout(() => {
-        // Добавляем обработчики клика на все карточки блюд
         const dishCards = document.querySelectorAll('.dish-card');
-        console.log('Найдено карточек:', dishCards.length); // Для отладки
+        console.log('Найдено карточек:', dishCards.length)
         
         dishCards.forEach(card => {
             card.addEventListener('click', function() {
@@ -87,7 +80,6 @@ function initEventListeners() {
     }, 100);
 }
 
-// Инициализация когда страница загрузится
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM загружен, инициализируем обработчики...');
     initEventListeners();
@@ -97,13 +89,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// Функция для управления временем доставки
 function initDeliveryTime() {
     const timeSpecificRadio = document.getElementById('time-specific');
     const deliveryTimeInput = document.getElementById('delivery-time');
     const timeAsapRadio = document.getElementById('time-asap');
     
-    // Включаем/выключаем поле времени в зависимости от выбора
     timeSpecificRadio.addEventListener('change', function() {
         if (this.checked) {
             deliveryTimeInput.disabled = false;
@@ -119,7 +109,6 @@ function initDeliveryTime() {
         }
     });
     
-    // Функция для округления времени до 5 минут
     function roundTo5Minutes(timeString) {
         if (!timeString) return null;
         
@@ -134,7 +123,6 @@ function initDeliveryTime() {
             finalHours += 1;
         }
         
-        // Проверяем границы времени
         if (finalHours < 7) {
             finalHours = 7;
             finalMinutes = 0;
@@ -146,32 +134,27 @@ function initDeliveryTime() {
         return `${String(finalHours).padStart(2, '0')}:${String(finalMinutes).padStart(2, '0')}`;
     }
     
-    // Функция проверки валидности времени
     function isValidTime(timeString) {
         if (!timeString) return false;
         
         const [hours, minutes] = timeString.split(':').map(Number);
         
-        // Проверяем границы
         if (hours < 7 || hours > 23) return false;
         if (hours === 23 && minutes > 0) return false;
         
-        // Проверяем шаг 5 минут
         return minutes % 5 === 0;
     }
     
-    // Обработчик изменения времени
     deliveryTimeInput.addEventListener('change', function() {
         const roundedTime = roundTo5Minutes(this.value);
         
         if (!isValidTime(this.value)) {
-            // Если время невалидно, показываем сообщение и устанавливаем округленное время
+
             this.value = roundedTime;
             showTimeMessage('Время автоматически округлено до ближайших 5 минут', 'info');
         }
     });
-    
-    // Обработчик ввода с клавиатуры
+
     deliveryTimeInput.addEventListener('blur', function() {
         if (this.value && !isValidTime(this.value)) {
             const roundedTime = roundTo5Minutes(this.value);
@@ -180,9 +163,7 @@ function initDeliveryTime() {
         }
     });
     
-    // Функция для показа сообщений
     function showTimeMessage(message, type) {
-        // Удаляем предыдущее сообщение если есть
         const existingMessage = deliveryTimeInput.parentNode.querySelector('.time-message');
         if (existingMessage) {
             existingMessage.remove();
@@ -201,7 +182,6 @@ function initDeliveryTime() {
         
         deliveryTimeInput.parentNode.appendChild(messageElement);
         
-        // Автоматически удаляем сообщение через 3 секунды
         setTimeout(() => {
             if (messageElement.parentNode) {
                 messageElement.remove();
@@ -209,7 +189,6 @@ function initDeliveryTime() {
         }, 3000);
     }
     
-    // Валидация при отправке формы
     document.getElementById('order-form').addEventListener('submit', function(event) {
         if (timeSpecificRadio.checked && deliveryTimeInput.value) {
             if (!isValidTime(deliveryTimeInput.value)) {
@@ -220,13 +199,11 @@ function initDeliveryTime() {
         }
     });
     
-    // Устанавливаем ближайшее корректное время по умолчанию
     function setDefaultTime() {
         const now = new Date();
         let hours = now.getHours();
         let minutes = now.getMinutes();
         
-        // Округляем до ближайших 5 минут
         minutes = Math.ceil(minutes / 5) * 5;
         
         if (minutes === 60) {
@@ -234,7 +211,6 @@ function initDeliveryTime() {
             hours += 1;
         }
         
-        // Проверяем границы
         if (hours < 7) {
             hours = 7;
             minutes = 0;
@@ -246,10 +222,8 @@ function initDeliveryTime() {
         deliveryTimeInput.value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
     }
     
-    // Инициализация
     setDefaultTime();
     
-    // Добавляем подсказку под полем времени
     const timeHelp = document.createElement('small');
     timeHelp.textContent = 'Доступно время с 07:00 до 23:00 с интервалом 5 минут (например: 08:00, 08:05, 08:10)';
     timeHelp.style.cssText = `
