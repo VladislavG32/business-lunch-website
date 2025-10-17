@@ -1,6 +1,44 @@
-// Функция для фильтрации блюд
+function createDishCard(dish) {
+    const dishCard = document.createElement('div');
+    dishCard.className = 'dish-card';
+    dishCard.setAttribute('data-dish', dish.keyword);
+    dishCard.setAttribute('data-category', dish.category);
+    
+    dishCard.innerHTML = `
+        <img src="${dish.image}" alt="${dish.name}" 
+             onerror="this.style.display='none'">
+        <p class="price">${dish.price}Р</p>
+        <p class="name">${dish.name}</p>
+        <p class="weight">${dish.count}</p>
+        <button>Добавить</button>
+    `;
+    
+    dishCard.addEventListener('click', function() {
+        handleDishClick(dish.keyword);
+    });
+    
+    return dishCard;
+}
+
 function filterDishes(category, kind) {
-    const dishesGrid = document.querySelector(`.menu-section[data-category="${category}"] .dishes-grid`);
+    console.log(`Фильтрация: категория=${category}, вид=${kind}`);
+    
+    const menuSections = document.querySelectorAll('.menu-section');
+    let targetSection = null;
+    
+    menuSections.forEach(section => {
+        const filters = section.querySelector('.filters');
+        if (filters && filters.getAttribute('data-category') === category) {
+            targetSection = section;
+        }
+    });
+    
+    if (!targetSection) {
+        console.error(`Секция с категорией ${category} не найдена`);
+        return;
+    }
+    
+    const dishesGrid = targetSection.querySelector('.dishes-grid');
     const allDishes = dishes.filter(dish => dish.category === category);
     
     let filteredDishes;
@@ -10,50 +48,43 @@ function filterDishes(category, kind) {
         filteredDishes = allDishes.filter(dish => dish.kind === kind);
     }
     
-    // Очищаем сетку
     dishesGrid.innerHTML = '';
     
-    // Добавляем отфильтрованные блюда
     filteredDishes.forEach(dish => {
         dishesGrid.appendChild(createDishCard(dish));
     });
     
-    // Обновляем обработчики событий для новых карточек
-    initEventListeners();
+    console.log(`Отображено ${filteredDishes.length} блюд в категории ${category}`);
 }
 
-// Функция для инициализации фильтров
 function initFilters() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const category = this.closest('.filters').getAttribute('data-category');
+            const filtersContainer = this.closest('.filters');
+            const category = filtersContainer.getAttribute('data-category');
             const kind = this.getAttribute('data-kind');
             const isActive = this.classList.contains('active');
             
+            console.log(`Клик: категория=${category}, вид=${kind}, активна=${isActive}`);
+            
             if (isActive && kind !== 'all') {
-                // Если кликнули на активный фильтр (кроме "Все"), снимаем активность
                 this.classList.remove('active');
                 filterDishes(category, 'all');
-                
-                // Активируем кнопку "Все"
-                const allButton = this.closest('.filters').querySelector('[data-kind="all"]');
+
+                const allButton = filtersContainer.querySelector('[data-kind="all"]');
                 allButton.classList.add('active');
             } else {
-                // Снимаем активность со всех кнопок в этой группе
-                const siblingButtons = this.closest('.filters').querySelectorAll('.filter-btn');
+                const siblingButtons = filtersContainer.querySelectorAll('.filter-btn');
                 siblingButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Активируем текущую кнопку
+
                 this.classList.add('active');
-                
-                // Применяем фильтр
+
                 filterDishes(category, kind);
             }
         });
     });
 }
 
-// Инициализация фильтров при загрузке DOM
 document.addEventListener('DOMContentLoaded', initFilters);
