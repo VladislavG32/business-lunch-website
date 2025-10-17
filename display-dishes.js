@@ -1,4 +1,3 @@
-// Функция для создания карточки блюда
 function createDishCard(dish) {
     const dishCard = document.createElement('div');
     dishCard.className = 'dish-card';
@@ -6,7 +5,8 @@ function createDishCard(dish) {
     dishCard.setAttribute('data-category', dish.category);
     
     dishCard.innerHTML = `
-        <img src="${dish.image}" alt="${dish.name}" onerror="this.src='images/menu/placeholder.jpg'">
+        <img src="${dish.image}" alt="${dish.name}" 
+             onerror="this.style.display='none'">
         <p class="price">${dish.price}Р</p>
         <p class="name">${dish.name}</p>
         <p class="weight">${dish.count}</p>
@@ -21,46 +21,29 @@ function createDishCard(dish) {
 }
 
 function displayDishes() {
-    const sortedDishes = [...dishes].sort((a, b) => a.name.localeCompare(b.name));
-
-    const dishesByCategory = {
-        soup: sortedDishes.filter(dish => dish.category === 'soup'),
-        main: sortedDishes.filter(dish => dish.category === 'main'),
-        salad: sortedDishes.filter(dish => dish.category === 'salad'),
-        drink: sortedDishes.filter(dish => dish.category === 'drink'),
-        dessert: sortedDishes.filter(dish => dish.category === 'dessert')
-    };
-
-    const soupSection = document.querySelector('.menu-section:nth-child(1) .dishes-grid');
-    const mainSection = document.querySelector('.menu-section:nth-child(2) .dishes-grid');
-    const saladSection = document.querySelector('.menu-section:nth-child(3) .dishes-grid');
-    const drinkSection = document.querySelector('.menu-section:nth-child(4) .dishes-grid');
-    const dessertSection = document.querySelector('.menu-section:nth-child(5) .dishes-grid');
-
-    soupSection.innerHTML = '';
-    mainSection.innerHTML = '';
-    saladSection.innerHTML = '';
-    drinkSection.innerHTML = '';
-    dessertSection.innerHTML = '';
-
-    dishesByCategory.soup.forEach(dish => {
-        soupSection.appendChild(createDishCard(dish));
-    });
+    console.log('Загрузка блюд...');
     
-    dishesByCategory.main.forEach(dish => {
-        mainSection.appendChild(createDishCard(dish));
-    });
+    // Простой способ - находим все dishes-grid и заполняем по порядку
+    const dishesGrids = document.querySelectorAll('.dishes-grid');
     
-    dishesByCategory.salad.forEach(dish => {
-        saladSection.appendChild(createDishCard(dish));
-    });
+    // Очищаем все сетки
+    dishesGrids.forEach(grid => grid.innerHTML = '');
     
-    dishesByCategory.drink.forEach(dish => {
-        drinkSection.appendChild(createDishCard(dish));
-    });
+    // Сортируем блюда по категориям
+    const categories = ['soup', 'main', 'salad', 'drink', 'dessert'];
     
-    dishesByCategory.dessert.forEach(dish => {
-        dessertSection.appendChild(createDishCard(dish));
+    categories.forEach((category, index) => {
+        if (dishesGrids[index]) {
+            const categoryDishes = dishes
+                .filter(dish => dish.category === category)
+                .sort((a, b) => a.name.localeCompare(b.name));
+                
+            categoryDishes.forEach(dish => {
+                dishesGrids[index].appendChild(createDishCard(dish));
+            });
+            
+            console.log(`Добавлено ${categoryDishes.length} блюд в категорию ${category}`);
+        }
     });
 }
 

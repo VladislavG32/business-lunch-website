@@ -204,3 +204,60 @@ small {
         width: 100%;
     }
 }
+/* Стили для уведомлений */
+.notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.notification-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.notification-content {
+    position: relative;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    z-index: 1001;
+}
+
+.notification-content h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    line-height: 1.4;
+}
+
+.notification-ok-btn {
+    background-color: #ff7f50;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.notification-ok-btn:hover {
+    background-color: #e67348;
+    transform: scale(1.05);
+}

@@ -141,3 +141,97 @@
         font-size: 0.8rem;
     }
 }
+
+/* Стили для комбо-секции */
+.combo-section {
+    margin-bottom: 40px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.combo-section h2 {
+    color: #ff7f50;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.combo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.combo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border: 2px solid #f1eee9;
+    border-radius: 12px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+}
+
+.combo-item:hover {
+    border-color: #ff7f50;
+    transform: translateY(-5px);
+}
+
+.combo-dish {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.combo-dish img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.combo-dish:hover img {
+    transform: translateY(-8px) scale(1.1);
+}
+
+.combo-dish span {
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+}
+
+.dessert-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background-color: #fff8f6;
+    border-radius: 12px;
+    border: 2px dashed #ff7f50;
+}
+
+.dessert-note {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    margin: 0;
+}
+
+/* Адаптивность для комбо-секции */
+@media (max-width: 768px) {
+    .combo-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .combo-item {
+        padding: 15px;
+    }
+}
