@@ -13,7 +13,13 @@ function createDishCard(dish) {
         <button>Добавить</button>
     `;
     
+    // Добавляем отладку для главных блюд
+    if (dish.category === 'main-course') {
+        console.log('Создана карточка главного блюда:', dish.keyword, dish.name);
+    }
+    
     dishCard.addEventListener('click', function() {
+        console.log('Клик по карточке:', dish.keyword, dish.category);
         handleDishClick(dish.keyword);
     });
     
@@ -21,16 +27,20 @@ function createDishCard(dish) {
 }
 
 function displayDishes() {
-    console.log('Загрузка блюд...');
+    console.log('Отображение блюд...');
     
-    // Простой способ - находим все dishes-grid и заполняем по порядку
+    // Проверяем что данные загружены
+    if (!dishes || dishes.length === 0) {
+        console.log('Нет данных для отображения');
+        return;
+    }
+    
     const dishesGrids = document.querySelectorAll('.dishes-grid');
+    console.log('Найдено сеток для блюд:', dishesGrids.length);
     
-    // Очищаем все сетки
     dishesGrids.forEach(grid => grid.innerHTML = '');
     
-    // Сортируем блюда по категориям
-    const categories = ['soup', 'main', 'salad', 'drink', 'dessert'];
+    const categories = ['soup', 'main-course', 'salad', 'drink', 'dessert'];
     
     categories.forEach((category, index) => {
         if (dishesGrids[index]) {
@@ -43,8 +53,8 @@ function displayDishes() {
             });
             
             console.log(`Добавлено ${categoryDishes.length} блюд в категорию ${category}`);
+        } else {
+            console.warn(`Сетка с индексом ${index} (категория ${category}) не найдена`);
         }
     });
 }
-
-document.addEventListener('DOMContentLoaded', displayDishes);

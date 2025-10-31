@@ -1,75 +1,54 @@
-// Функция для проверки заказа
-function validateOrder() {
-    const { soup, main, salad, drink, dessert } = selectedDishes;
-    const validCombos = [
-        soup && main && salad && drink,
-        soup && main && drink,
-        soup && salad && drink,
-        main && salad && drink,
-        main && drink
-    ];
+function showNotification(message, type = 'info', duration = 3000) {
+    const container = document.getElementById('notifications-container');
     
-    if (validCombos.some(combo => combo)) {
-        return { isValid: true };
+    if (!container) {
+        console.error('Контейнер уведомлений не найден');
+        return;
     }
-    
-    let message = '';
-    
-    if (!soup && !main && !salad && !drink && !dessert) {
-        message = 'Ничего не выбрано. Выберите блюда для заказа';
-    } else if (!drink && (soup || main || salad)) {
-        message = 'Выберите напиток';
-    } else if (soup && !main && !salad) {
-        message = 'Выберите главное блюдо/салат/стартер';
-    } else if (salad && !soup && !main) {
-        message = 'Выберите суп или главное блюдо';
-    } else if ((drink || dessert) && !soup && !main && !salad) {
-        message = 'Выберите главное блюдо';
-    } else {
-        message = 'Выберите суп или главное блюдо';
-    }
-    
-    return { isValid: false, message };
-}
 
-function showNotification(message) {
     const notification = document.createElement('div');
-    notification.className = 'notification';
-    
+    notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
-            <h3>${message}</h3>
-            <button class="notification-ok-btn">Окей 💬</button>
+            <span class="notification-text">${message}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
         </div>
-        <div class="notification-overlay"></div>
     `;
-    
-    document.body.appendChild(notification);
-    
-    const okBtn = notification.querySelector('.notification-ok-btn');
-    okBtn.addEventListener('click', function() {
-        notification.remove();
-    });
-    
-    const overlay = notification.querySelector('.notification-overlay');
-    overlay.addEventListener('click', function() {
-        notification.remove();
-    });
+
+    container.appendChild(notification);
+
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, duration);
 }
 
-function initFormValidation() {
-    const orderForm = document.getElementById('order-form');
-    
-    orderForm.addEventListener('submit', function(event) {
-        const validation = validateOrder();
-        
-        if (!validation.isValid) {
-            event.preventDefault();
-            showNotification(validation.message);
-        }
-    });
+function showSuccess(message, duration = 3000) {
+    showNotification(message, 'success', duration);
+}
+
+function showError(message, duration = 4000) {
+    showNotification(message, 'error', duration);
+}
+
+function showWarning(message, duration = 3500) {
+    showNotification(message, 'warning', duration);
+}
+
+function showInfo(message, duration = 3000) {
+    showNotification(message, 'info', duration);
+}
+
+function showValidation(message, duration = 3500) {
+    showNotification(message, 'validation', duration);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    initFormValidation();
+    if (!document.getElementById('notifications-container')) {
+        const container = document.createElement('div');
+        container.id = 'notifications-container';
+        container.className = 'notifications-container';
+        document.body.appendChild(container);
+    }
 });

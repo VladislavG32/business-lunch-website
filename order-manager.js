@@ -1,10 +1,40 @@
 let selectedDishes = {
     soup: null,
-    main: null,
+    'main-course': null,
     salad: null,
     drink: null,
     dessert: null
 };
+
+function loadOrderFromStorage() {
+    const savedOrder = localStorage.getItem('lunchOrder');
+    if (savedOrder) {
+        const orderIds = JSON.parse(savedOrder);
+        if (orderIds.soup) selectedDishes.soup = getDishByKeyword(orderIds.soup);
+        if (orderIds['main-course']) selectedDishes['main-course'] = getDishByKeyword(orderIds['main-course']);
+        if (orderIds.salad) selectedDishes.salad = getDishByKeyword(orderIds.salad);
+        if (orderIds.drink) selectedDishes.drink = getDishByKeyword(orderIds.drink);
+        if (orderIds.dessert) selectedDishes.dessert = getDishByKeyword(orderIds.dessert);
+    }
+}
+
+function saveOrderToStorage() {
+    const orderIds = {
+        soup: selectedDishes.soup?.keyword || null,
+        'main-course': selectedDishes['main-course']?.keyword || null,
+        salad: selectedDishes.salad?.keyword || null,
+        drink: selectedDishes.drink?.keyword || null,
+        dessert: selectedDishes.dessert?.keyword || null
+    };
+    localStorage.setItem('lunchOrder', JSON.stringify(orderIds));
+}
+
+function validateOrder() {
+    if (!selectedDishes.drink) {
+        return { isValid: false, message: 'Выберите напиток' };
+    }
+    return { isValid: true, message: '' };
+}
 
 function updateOrderSummary() {
     const orderSoup = document.getElementById('selected-soup');
@@ -15,63 +45,189 @@ function updateOrderSummary() {
     const orderTotal = document.getElementById('order-total');
     const orderSummary = document.getElementById('order-summary');
     const emptyMessage = document.getElementById('empty-order-message');
-    
+
     const selectedCount = Object.values(selectedDishes).filter(dish => dish !== null).length;
-    
+
     if (selectedCount === 0) {
-        orderSummary.style.display = 'none';
-        emptyMessage.style.display = 'block';
+        if (orderSummary) orderSummary.style.display = 'none';
+        if (emptyMessage) emptyMessage.style.display = 'block';
     } else {
-        orderSummary.style.display = 'block';
-        emptyMessage.style.display = 'none';
+        if (orderSummary) orderSummary.style.display = 'block';
+        if (emptyMessage) emptyMessage.style.display = 'none';
+
+        if (orderSoup) {
+            orderSoup.textContent = selectedDishes.soup ?
+                `${selectedDishes.soup.name} ${selectedDishes.soup.price}₽` :
+                'Блюдо не выбрано';
+        }
+
+        if (orderMain) {
+            orderMain.textContent = selectedDishes['main-course'] ?
+                `${selectedDishes['main-course'].name} ${selectedDishes['main-course'].price}₽` :
+                'Блюдо не выбрано';
+        }
+
+        if (orderSalad) {
+            orderSalad.textContent = selectedDishes.salad ?
+                `${selectedDishes.salad.name} ${selectedDishes.salad.price}₽` :
+                'Блюдо не выбрано';
+        }
+
+        if (orderDrink) {
+            orderDrink.textContent = selectedDishes.drink ?
+                `${selectedDishes.drink.name} ${selectedDishes.drink.price}₽` :
+                'Напиток не выбран';
+        }
+
+        if (orderDessert) {
+            orderDessert.textContent = selectedDishes.dessert ?
+                `${selectedDishes.dessert.name} ${selectedDishes.dessert.price}₽` :
+                'Десерт не выбран';
+        }
+
+        let total = 0;
+        Object.values(selectedDishes).forEach(dish => {
+            if (dish) total += dish.price;
+        });
+
+        if (orderTotal) {
+            orderTotal.textContent = `${total}₽`;
+        }
     }
 
-    orderSoup.textContent = selectedDishes.soup ? `${selectedDishes.soup.name} ${selectedDishes.soup.price}Р` : 'Блюдо не выбрано';
-    orderMain.textContent = selectedDishes.main ? `${selectedDishes.main.name} ${selectedDishes.main.price}Р` : 'Блюдо не выбрано';
-    orderSalad.textContent = selectedDishes.salad ? `${selectedDishes.salad.name} ${selectedDishes.salad.price}Р` : 'Блюдо не выбрано';
-    orderDrink.textContent = selectedDishes.drink ? `${selectedDishes.drink.name} ${selectedDishes.drink.price}Р` : 'Напиток не выбран';
-    orderDessert.textContent = selectedDishes.dessert ? `${selectedDishes.dessert.name} ${selectedDishes.dessert.price}Р` : 'Десерт не выбран';
+    updateCheckoutPanel();
+}
 
-    let total = 0;
-    Object.values(selectedDishes).forEach(dish => {
-        if (dish) {
-            total += dish.price;
+function updateCheckoutPanel() {
+    const checkoutPanel = document.getElementById('checkout-panel');
+    const checkoutTotal = document.getElementById('checkout-total');
+    const checkoutLink = document.getElementById('checkout-link');
+    if (!checkoutPanel) return;
+
+    const selectedCount = Object.values(selectedDishes).filter(dish => dish !== null).length;
+    const validation = validateOrder();
+
+    if (selectedCount === 0) {
+        checkoutPanel.style.display = 'none';
+    } else {
+        checkoutPanel.style.display = 'block';
+        let total = 0;
+        Object.values(selectedDishes).forEach(dish => {
+            if (dish) total += dish.price;
+        });
+
+        if (checkoutTotal) {
+            checkoutTotal.textContent = `${total}₽`;
         }
-    });
-    
-    orderTotal.textContent = `${total}Р`;
+
+        if (checkoutLink) {
+            if (validation.isValid) {
+                checkoutLink.classList.remove('disabled');
+                checkoutLink.style.pointerEvents = 'auto';
+                checkoutLink.style.opacity = '1';
+            } else {
+                checkoutLink.classList.add('disabled');
+                checkoutLink.style.pointerEvents = 'none';
+                checkoutLink.style.opacity = '0.5';
+            }
+        }
+    }
 }
 
 function handleDishClick(dishKeyword) {
-    console.log('Кликнули на блюдо:', dishKeyword); 
-    
-    const selectedDish = dishes.find(dish => dish.keyword === dishKeyword);
-    
+    const selectedDish = getDishByKeyword(dishKeyword);
     if (selectedDish) {
         selectedDishes[selectedDish.category] = selectedDish;
-        
+        saveOrderToStorage();
         updateOrderSummary();
 
         const allCardsInCategory = document.querySelectorAll(`.dish-card[data-category="${selectedDish.category}"]`);
         allCardsInCategory.forEach(card => {
             card.classList.remove('selected');
         });
-        
+
         const clickedCard = document.querySelector(`[data-dish="${dishKeyword}"]`);
         if (clickedCard) {
             clickedCard.classList.add('selected');
         }
-        
-        console.log('Выбрано блюдо:', selectedDish.name); 
     }
+}
+
+function removeDishFromOrder(category) {
+    selectedDishes[category] = null;
+    saveOrderToStorage();
+
+    const card = document.querySelector(`.order-dish-card[data-category="${category}"]`);
+    if (card) {
+        card.remove();
+    }
+
+    updateOrderDisplay();
+}
+
+function updateOrderDisplay() {
+    const orderGrid = document.querySelector('.order-dishes-grid');
+    const emptyMessage = document.getElementById('empty-order');
+    const orderFormSection = document.querySelector('.order-form-section');
+    if (!orderGrid) return;
+
+    const hasItems = Object.values(selectedDishes).some(dish => dish !== null);
+
+    if (!hasItems) {
+        if (emptyMessage) emptyMessage.style.display = 'block';
+        if (orderFormSection) orderFormSection.style.display = 'none';
+        orderGrid.innerHTML = '';
+    } else {
+        if (emptyMessage) emptyMessage.style.display = 'none';
+        if (orderFormSection) orderFormSection.style.display = 'block';
+        updateOrderForm();
+    }
+}
+
+function updateOrderForm() {
+    const soupPrice = document.getElementById('order-soup-price');
+    const mainPrice = document.getElementById('order-main-price');
+    const saladPrice = document.getElementById('order-salad-price');
+    const drinkPrice = document.getElementById('order-drink-price');
+    const dessertPrice = document.getElementById('order-dessert-price');
+    const totalPrice = document.getElementById('order-total-price');
+
+    const soupName = document.getElementById('order-soup-name');
+    const mainName = document.getElementById('order-main-name');
+    const saladName = document.getElementById('order-salad-name');
+    const drinkName = document.getElementById('order-drink-name');
+    const dessertName = document.getElementById('order-dessert-name');
+
+    if (soupName) soupName.textContent = selectedDishes.soup ? selectedDishes.soup.name : 'Не выбрано';
+    if (mainName) mainName.textContent = selectedDishes['main-course'] ? selectedDishes['main-course'].name : 'Не выбрано';
+    if (saladName) saladName.textContent = selectedDishes.salad ? selectedDishes.salad.name : 'Не выбрано';
+    if (drinkName) drinkName.textContent = selectedDishes.drink ? selectedDishes.drink.name : 'Не выбран';
+    if (dessertName) dessertName.textContent = selectedDishes.dessert ? selectedDishes.dessert.name : 'Не выбран';
+
+    if (soupPrice) soupPrice.textContent = selectedDishes.soup ? `${selectedDishes.soup.price}₽` : '0₽';
+    if (mainPrice) mainPrice.textContent = selectedDishes['main-course'] ? `${selectedDishes['main-course'].price}₽` : '0₽';
+    if (saladPrice) saladPrice.textContent = selectedDishes.salad ? `${selectedDishes.salad.price}₽` : '0₽';
+    if (drinkPrice) drinkPrice.textContent = selectedDishes.drink ? `${selectedDishes.drink.price}₽` : '0₽';
+    if (dessertPrice) dessertPrice.textContent = selectedDishes.dessert ? `${selectedDishes.dessert.price}₽` : '0₽';
+
+    let total = 0;
+    Object.values(selectedDishes).forEach(dish => {
+        if (dish) total += dish.price;
+    });
+
+    if (totalPrice) totalPrice.textContent = `${total}₽`;
 }
 
 function initEventListeners() {
     setTimeout(() => {
         const dishCards = document.querySelectorAll('.dish-card');
-        console.log('Найдено карточек:', dishCards.length)
-        
         dishCards.forEach(card => {
+            const newCard = card.cloneNode(true);
+            card.parentNode.replaceChild(newCard, card);
+        });
+
+        const newCards = document.querySelectorAll('.dish-card');
+        newCards.forEach(card => {
             card.addEventListener('click', function() {
                 const dishKeyword = this.getAttribute('data-dish');
                 handleDishClick(dishKeyword);
@@ -80,27 +236,22 @@ function initEventListeners() {
     }, 100);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM загружен, инициализируем обработчики...');
-    initEventListeners();
-    updateOrderSummary();
-    initDeliveryTime();
-});
-
-
-
 function initDeliveryTime() {
     const timeSpecificRadio = document.getElementById('time-specific');
     const deliveryTimeInput = document.getElementById('delivery-time');
     const timeAsapRadio = document.getElementById('time-asap');
-    
+
+    if (!timeSpecificRadio || !deliveryTimeInput || !timeAsapRadio) {
+        return;
+    }
+
     timeSpecificRadio.addEventListener('change', function() {
         if (this.checked) {
             deliveryTimeInput.disabled = false;
             deliveryTimeInput.required = true;
         }
     });
-    
+
     timeAsapRadio.addEventListener('change', function() {
         if (this.checked) {
             deliveryTimeInput.disabled = true;
@@ -108,21 +259,19 @@ function initDeliveryTime() {
             deliveryTimeInput.value = '';
         }
     });
-    
+
     function roundTo5Minutes(timeString) {
         if (!timeString) return null;
-        
         const [hours, minutes] = timeString.split(':').map(Number);
         const roundedMinutes = Math.round(minutes / 5) * 5;
-        
         let finalHours = hours;
         let finalMinutes = roundedMinutes;
-        
+
         if (finalMinutes === 60) {
             finalMinutes = 0;
             finalHours += 1;
         }
-        
+
         if (finalHours < 7) {
             finalHours = 7;
             finalMinutes = 0;
@@ -130,87 +279,36 @@ function initDeliveryTime() {
             finalHours = 23;
             finalMinutes = 0;
         }
-        
+
         return `${String(finalHours).padStart(2, '0')}:${String(finalMinutes).padStart(2, '0')}`;
     }
-    
+
     function isValidTime(timeString) {
         if (!timeString) return false;
-        
         const [hours, minutes] = timeString.split(':').map(Number);
-        
         if (hours < 7 || hours > 23) return false;
         if (hours === 23 && minutes > 0) return false;
-        
         return minutes % 5 === 0;
     }
-    
+
     deliveryTimeInput.addEventListener('change', function() {
         const roundedTime = roundTo5Minutes(this.value);
-        
         if (!isValidTime(this.value)) {
-
             this.value = roundedTime;
-            showTimeMessage('Время автоматически округлено до ближайших 5 минут', 'info');
         }
     });
 
-    deliveryTimeInput.addEventListener('blur', function() {
-        if (this.value && !isValidTime(this.value)) {
-            const roundedTime = roundTo5Minutes(this.value);
-            this.value = roundedTime;
-            showTimeMessage('Время автоматически округлено до ближайших 5 минут', 'info');
-        }
-    });
-    
-    function showTimeMessage(message, type) {
-        const existingMessage = deliveryTimeInput.parentNode.querySelector('.time-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-        
-        const messageElement = document.createElement('div');
-        messageElement.className = `time-message time-message-${type}`;
-        messageElement.textContent = message;
-        messageElement.style.cssText = `
-            font-size: 0.8em;
-            margin-top: 5px;
-            padding: 5px;
-            border-radius: 3px;
-            ${type === 'error' ? 'background-color: #ffe6e6; color: #d00;' : 'background-color: #e6f7ff; color: #0066cc;'}
-        `;
-        
-        deliveryTimeInput.parentNode.appendChild(messageElement);
-        
-        setTimeout(() => {
-            if (messageElement.parentNode) {
-                messageElement.remove();
-            }
-        }, 3000);
-    }
-    
-    document.getElementById('order-form').addEventListener('submit', function(event) {
-        if (timeSpecificRadio.checked && deliveryTimeInput.value) {
-            if (!isValidTime(deliveryTimeInput.value)) {
-                event.preventDefault();
-                showTimeMessage('Пожалуйста, выберите время с интервалом 5 минут (например: 08:00, 08:05, 08:10)', 'error');
-                deliveryTimeInput.focus();
-            }
-        }
-    });
-    
     function setDefaultTime() {
         const now = new Date();
         let hours = now.getHours();
         let minutes = now.getMinutes();
-        
         minutes = Math.ceil(minutes / 5) * 5;
-        
+
         if (minutes === 60) {
             minutes = 0;
             hours += 1;
         }
-        
+
         if (hours < 7) {
             hours = 7;
             minutes = 0;
@@ -218,21 +316,19 @@ function initDeliveryTime() {
             hours = 7;
             minutes = 0;
         }
-        
+
         deliveryTimeInput.value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
     }
-    
+
     setDefaultTime();
-    
-    const timeHelp = document.createElement('small');
-    timeHelp.textContent = 'Доступно время с 07:00 до 23:00 с интервалом 5 минут (например: 08:00, 08:05, 08:10)';
-    timeHelp.style.cssText = `
-        display: block;
-        color: #666;
-        margin-top: 5px;
-        font-size: 0.9em;
-        line-height: 1.3;
-    `;
-    
-    deliveryTimeInput.parentNode.insertBefore(timeHelp, deliveryTimeInput.nextSibling);
 }
+
+window.selectedDishes = selectedDishes;
+window.handleDishClick = handleDishClick;
+window.updateOrderSummary = updateOrderSummary;
+window.loadOrderFromStorage = loadOrderFromStorage;
+window.saveOrderToStorage = saveOrderToStorage;
+window.removeDishFromOrder = removeDishFromOrder;
+window.updateOrderDisplay = updateOrderDisplay;
+window.updateOrderForm = updateOrderForm;
+window.validateOrder = validateOrder;

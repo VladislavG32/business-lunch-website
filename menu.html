@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="menu-style.css">
     <link rel="stylesheet" href="form-style.css">
+    <link rel="stylesheet" href="checkout-panel.css">
 </head>
 <body>
     <header>
@@ -14,10 +15,12 @@
         <nav>
             <a href="index.html">Главная</a>
             <a href="menu.html" id="active">Собрать ланч</a>
-            <a href="#">Корзина</a>
-            <a href="#contacts">Контакты</a>
+            <a href="order.html">Оформить заказ</a>
+            <a href="orders.html">Заказы</a>
+            <a href="index.html#contacts">Контакты</a>
         </nav>
     </header>
+
 
     <main>
         <!-- Блок с комбо-предложениями ПЕРЕД выбором блюд -->
@@ -44,6 +47,7 @@
                     </div>
                 </div>
 
+
                 <!-- Комбо 2 -->
                 <div class="combo-item">
                     <div class="combo-dish">
@@ -59,6 +63,7 @@
                         <span>Напиток</span>
                     </div>
                 </div>
+
 
                 <!-- Комbo 3 -->
                 <div class="combo-item">
@@ -76,6 +81,7 @@
                     </div>
                 </div>
 
+
                 <!-- Комбо 4 -->
                 <div class="combo-item">
                     <div class="combo-dish">
@@ -92,6 +98,7 @@
                     </div>
                 </div>
 
+
                 <!-- Комбо 5 -->
                 <div class="combo-item">
                     <div class="combo-dish">
@@ -105,6 +112,7 @@
                 </div>
             </div>
 
+
             <!-- Блок с десертами -->
             <div class="dessert-info">
                 <div class="combo-dish">
@@ -114,6 +122,7 @@
                 <p class="dessert-note">*(Можно добавить к любому заказу)</p>
             </div>
         </section>
+
 
         <!-- Секция супов -->
         <section class="menu-section">
@@ -125,9 +134,9 @@
                 <button class="filter-btn" data-kind="veg">вегетарианский</button>
             </div>
             <div class="dishes-grid">
-                <!-- Карточки будут созданы JavaScript -->
             </div>
         </section>
+
 
         <!-- Секция главных блюд -->
         <section class="menu-section">
@@ -139,9 +148,9 @@
                 <button class="filter-btn" data-kind="veg">вегетарианское</button>
             </div>
             <div class="dishes-grid">
-                <!-- Карточки будут созданы JavaScript -->
             </div>
         </section>
+
 
         <!-- Секция салатов и стартеров -->
         <section class="menu-section">
@@ -153,9 +162,9 @@
                 <button class="filter-btn" data-kind="veg">вегетарианский</button>
             </div>
             <div class="dishes-grid">
-                <!-- Карточки будут созданы JavaScript -->
             </div>
         </section>
+
 
         <!-- Секция напитков -->
         <section class="menu-section">
@@ -166,9 +175,9 @@
                 <button class="filter-btn" data-kind="hot">горячий</button>
             </div>
             <div class="dishes-grid">
-                <!-- Карточки будут созданы JavaScript -->
             </div>
         </section>
+
 
         <!-- Секция десертов -->
         <section class="menu-section">
@@ -180,111 +189,21 @@
                 <button class="filter-btn" data-kind="large">большая порция</button>
             </div>
             <div class="dishes-grid">
-                <!-- Карточки будут созданы JavaScript -->
             </div>
         </section>
+
+        <!-- ПАНЕЛЬ ОФОРМЛЕНИЯ ЗАКАЗА (Lab 8) -->
+        <div id="checkout-panel" class="checkout-panel" style="display: none;">
+            <div class="checkout-content">
+                <div class="checkout-info">
+                    <span class="checkout-label">Стоимость заказа:</span>
+                    <span id="checkout-total" class="checkout-price">0₽</span>
+                </div>
+                <a href="order.html" id="checkout-link" class="checkout-link">Перейти к оформлению</a>
+            </div>
+        </div>
     </main>
 
-    <section class="order-form-section">
-        <h2>Сделать заказ</h2>
-        <form id="order-form" action="https://httpbin.org/post" method="POST">
-
-            <!-- Блок с заказом клиента -->
-            <div class="form-columns">
-                <div class="order-column">
-                    <h3>Ваш заказ</h3>
-                    
-                    <!-- Сообщение когда ничего не выбрано -->
-                    <div id="empty-order-message" style="text-align: center; color: #666; padding: 20px;">
-                        Ничего не выбрано
-                    </div>
-                    
-                    <!-- Блок с выбранными блюдами -->
-                    <div id="order-summary" style="display: none;">
-                        <div class="order-category">
-                            <strong>Суп:</strong>
-                            <span id="selected-soup">Блюдо не выбрано</span>
-                        </div>
-                        
-                        <div class="order-category">
-                            <strong>Главное блюдо:</strong>
-                            <span id="selected-main">Блюдо не выбрано</span>
-                        </div>
-                        
-                        <div class="order-category">
-                            <strong>Салат/стартер:</strong>
-                            <span id="selected-salad">Блюдо не выбрано</span>
-                        </div>
-                        
-                        <div class="order-category">
-                            <strong>Напиток:</strong>
-                            <span id="selected-drink">Напиток не выбран</span>
-                        </div>
-                        
-                        <div class="order-category">
-                            <strong>Десерт:</strong>
-                            <span id="selected-dessert">Десерт не выбран</span>
-                        </div>
-                        
-                        <div class="order-total" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #ff7f50;">
-                            <strong>Стоимость заказа:</strong>
-                            <span id="order-total" style="font-size: 1.2em; color: #ff7f50;">0 ₽</span>
-                        </div>
-                    </div>
-                    
-                    <label for="comment">Комментарии к заказу</label>
-                    <textarea id="comment" name="comment" rows="4" placeholder="Ваши пожелания..."></textarea>
-                </div>
-                <!-- Конец блока с заказом -->
-
-                <!-- Блок с данными клиента -->
-                <div class="client-column">
-                    <h3>Ваши данные</h3>
-
-                    <label for="client-name">Имя</label>
-                    <input type="text" id="client-name" name="client_name" required>
-
-                    <label for="client-email">Email</label>
-                    <input type="email" id="client-email" name="client_email" required>
-
-                    <div class="checkbox-wrapper">
-                        <input type="checkbox" id="subscribe" name="subscribe" checked>
-                        <label for="subscribe">Получать информацию о скидках и акциях</label>
-                    </div>
-
-                    <label for="client-phone">Номер телефона</label>
-                    <input type="tel" id="client-phone" name="client_phone" required>
-
-                    <label for="client-address">Адрес доставки</label>
-                    <input type="text" id="client-address" name="client_address" required>
-                    <small>Доставка осуществляется только по Москве</small>
-
-                    <fieldset>
-                        <legend>Время доставки:</legend>
-                        <div class="radio-wrapper">
-                            <input type="radio" id="time-asap" name="delivery_time_type" value="asap" required>
-                            <label for="time-asap">Как можно скорее</label>
-                        </div>
-                        <div class="radio-wrapper">
-                            <input type="radio" id="time-specific" name="delivery_time_type" value="specific">
-                            <label for="time-specific">К указанному времени</label>
-                        </div>
-                    </fieldset>
-
-                    <label for="delivery-time">Укажите время доставки</label>
-                    <input type="time" id="delivery-time" name="delivery_time" 
-                        min="07:00" max="23:00" step="300"
-                        placeholder="Выберите время">
-                    <small>Доступное время доставки с 7:00 до 23:00</small>
-
-                    <div class="form-buttons">
-                        <button type="reset">Сбросить</button>
-                        <button type="submit">Отправить</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </section>
 
     <footer id="contacts">
         <h2>Контакты</h2>
@@ -293,11 +212,62 @@
         <p>Email: <a href="mailto:order@lunch.ru">order@lunch.ru</a></p>
     </footer>
 
-    <!-- Подключение JavaScript файлов В КОНЦЕ -->
-    <script src="dishes-data.js"></script>
+
+    <script src="api-loader.js"></script>
     <script src="display-dishes.js"></script>
     <script src="order-manager.js"></script>
     <script src="filter-dishes.js"></script>
     <script src="notifications.js"></script>
+
+
+    <script>
+        // Основная функция инициализации приложения
+        async function initializeApp() {
+            console.log('Начало инициализации приложения...');
+            
+            await loadDishes();
+            console.log('Данные загружены, доступно блюд:', dishes.length);
+            
+            loadOrderFromStorage();
+            
+            if (typeof displayDishes === 'function') {
+                displayDishes();
+            }
+            
+            if (typeof initEventListeners === 'function') {
+                setTimeout(initEventListeners, 100);
+            }
+            
+            if (typeof updateOrderSummary === 'function') {
+                updateOrderSummary();
+            }
+            
+            if (typeof initFilters === 'function') {
+                setTimeout(initFilters, 100);
+            }
+            
+            const dishCards = document.querySelectorAll('.dish-card');
+            dishCards.forEach(card => {
+                const keyword = card.getAttribute('data-dish');
+                const category = card.getAttribute('data-category');
+                if (selectedDishes[category]?.keyword === keyword) {
+                    card.classList.add('selected');
+                }
+            });
+            
+            console.log('Приложение полностью инициализировано');
+        }
+
+
+        // Запускаем инициализацию когда DOM готов
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM загружен, начинаем инициализацию...');
+            initializeApp();
+        });
+    </script>
+    <div id="notifications-container" class="notifications-container"></div>
+    <script src="notifications.js"></script>
+
 </body>
 </html>
+

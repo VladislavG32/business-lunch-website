@@ -1,25 +1,3 @@
-function createDishCard(dish) {
-    const dishCard = document.createElement('div');
-    dishCard.className = 'dish-card';
-    dishCard.setAttribute('data-dish', dish.keyword);
-    dishCard.setAttribute('data-category', dish.category);
-    
-    dishCard.innerHTML = `
-        <img src="${dish.image}" alt="${dish.name}" 
-             onerror="this.style.display='none'">
-        <p class="price">${dish.price}Р</p>
-        <p class="name">${dish.name}</p>
-        <p class="weight">${dish.count}</p>
-        <button>Добавить</button>
-    `;
-    
-    dishCard.addEventListener('click', function() {
-        handleDishClick(dish.keyword);
-    });
-    
-    return dishCard;
-}
-
 function filterDishes(category, kind) {
     console.log(`Фильтрация: категория=${category}, вид=${kind}`);
     
@@ -28,8 +6,11 @@ function filterDishes(category, kind) {
     
     menuSections.forEach(section => {
         const filters = section.querySelector('.filters');
-        if (filters && filters.getAttribute('data-category') === category) {
-            targetSection = section;
+        if (filters) {
+            const filterCategory = filters.getAttribute('data-category');
+            if ((filterCategory === 'main' && category === 'main-course') || filterCategory === category) {
+                targetSection = section;
+            }
         }
     });
     
@@ -39,13 +20,23 @@ function filterDishes(category, kind) {
     }
     
     const dishesGrid = targetSection.querySelector('.dishes-grid');
-    const allDishes = dishes.filter(dish => dish.category === category);
+    const allDishes = getDishesByCategory(category);
     
     let filteredDishes;
     if (kind === 'all') {
         filteredDishes = allDishes;
     } else {
-        filteredDishes = allDishes.filter(dish => dish.kind === kind);
+        if (category === 'main-course') {
+            const kindMap = {
+                'fish': 'fish',      
+                'meat': 'meat',      
+                'veg': 'veg'         
+            };
+            const mappedKind = kindMap[kind] || kind;
+            filteredDishes = allDishes.filter(dish => dish.kind === mappedKind);
+        } else {
+            filteredDishes = allDishes.filter(dish => dish.kind === kind);
+        }
     }
     
     dishesGrid.innerHTML = '';
@@ -57,15 +48,35 @@ function filterDishes(category, kind) {
     console.log(`Отображено ${filteredDishes.length} блюд в категории ${category}`);
 }
 
+function debugMainCourseKinds() {
+    const mainDishes = getDishesByCategory('main-course');
+    console.log('=== ДИАГНОСТИКА MAIN-COURSE ===');
+    console.log('Все главные блюда:', mainDishes.map(dish => ({
+        name: dish.name,
+        kind: dish.kind,
+        keyword: dish.keyword
+    })));
+    console.log('Уникальные значения kind:', [...new Set(mainDishes.map(dish => dish.kind))]);
+    console.log('==============================');
+}
+
+// Вызовите эту функцию в initFilters
 function initFilters() {
+    // Диагностика
+    debugMainCourseKinds();
+    
     const filterButtons = document.querySelectorAll('.filter-btn');
     
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
             const filtersContainer = this.closest('.filters');
-            const category = filtersContainer.getAttribute('data-category');
+            let category = filtersContainer.getAttribute('data-category');
             const kind = this.getAttribute('data-kind');
             const isActive = this.classList.contains('active');
+            
+            if (category === 'main') {
+                category = 'main-course';
+            }
             
             console.log(`Клик: категория=${category}, вид=${kind}, активна=${isActive}`);
             
@@ -86,5 +97,3 @@ function initFilters() {
         });
     });
 }
-
-document.addEventListener('DOMContentLoaded', initFilters);

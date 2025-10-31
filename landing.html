@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshLunch - Вкусные бизнес-ланчи</title>
+    <link rel="stylesheet" href="landing-style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <header>
+        <h1>FreshLunch - Вкусные бизнес-ланчи</h1>
+        <nav>
+            <a href="index.html">На главную</a>
+            <a href="#features">Преимущества</a>
+            <a href="#contact">Контакты</a>
+            <a href="menu.html" id="active">Меню</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>Свежие ланчи для вашего рабочего дня</h2>
+                    <p>Доставляем полезные, вкусные и сбалансированные обеды прямо к вам в офис. 
+                       Экономьте время, питайтесь здоровой едой.</p>
+                    <div class="hero-buttons">
+                        <a href="order.html" class="btn btn-primary">Собрать ланч</a>
+                        <button class="btn btn-secondary" onclick="scrollToFeatures()">Узнать больше</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&h=400&fit=crop" 
+                         alt="Здоровые ланчи">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <h2>Почему выбирают FreshLunch?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🥗</div>
+                    <h3>Полезная еда</h3>
+                    <p>Все блюда готовят профессиональные повара из свежих органических продуктов без консервантов.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Быстрая доставка</h3>
+                    <p>Доставляем в течение 30 минут с 7:00 до 23:00. Горячие ланчи прибывают в термосумке.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Доступные цены</h3>
+                    <p>Сбалансированный ланч из трёх блюд стоит всего от 250 рублей. Выгодная подписка на месяц.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Составляйте сами</h3>
+                    <p>Выбирайте нужные блюда из меню или используйте готовые комбо. Полная свобода выбора.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Простой заказ</h3>
+                    <p>Интуитивный интерфейс. Заказ готов за 2 минуты, оплата любым способом.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎧</div>
+                    <h3>Поддержка 24/7</h3>
+                    <p>Наша команда всегда готова помочь. Ответим на любой вопрос в течение 5 минут.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>1+</h3>
+                    <p>Довольных клиентов</p>
+                </div>
+                <div class="stat-item">
+                    <h3>25+</h3>
+                    <p>Блюд в меню</p>
+                </div>
+                <div class="stat-item">
+                    <h3>100%</h3>
+                    <p>Рекомендуют друзьям</p>
+                </div>
+                <div class="stat-item">
+                    <h3>99%</h3>
+                    <p>Вовремя доставлено</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <h2>Свяжитесь с нами</h2>
+            
+            <div class="contact-info">
+                <div class="contact-card">
+                    <h4>📍 Адрес</h4>
+                    <p>Москва, ул. Пушкина, д. 1<br>Офис 1</p>
+                </div>
+
+                <div class="contact-card">
+                    <h4>📞 Телефон</h4>
+                    <p>+7 (900) 000-00-00<br><span class="small">Пн-Пт: 7:00-23:00</span></p>
+                </div>
+
+                <div class="contact-card">
+                    <h4>📧 Email</h4>
+                    <p>order@lunch.ru<br><span class="small">Ответим в течение часа</span></p>
+                </div>
+            </div>
+
+            <!-- Feedback Form -->
+            <div class="feedback-form-container">
+                <h3>Напишите нам</h3>
+                <form id="feedbackForm" class="feedback-form">
+                    <label>Ваше имя
+                        <input type="text" name="name" required>
+                    </label>
+
+                    <label>Email
+                        <input type="email" name="email" required>
+                    </label>
+
+                    <label>Телефон
+                        <input type="tel" name="phone" required>
+                    </label>
+
+                    <label>Сообщение
+                        <textarea name="message" rows="5" required></textarea>
+                    </label>
+
+                    <label class="checkbox">
+                        <input type="checkbox" name="subscribe">
+                        Подписать на рассылку спецпредложений
+                    </label>
+
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h6>FreshLunch</h6>
+                <p>Свежие ланчи</p>
+            </div>
+            <div class="footer-section">
+        </div>
+        <p class="footer-bottom">&copy; 2025 FreshLunch.</p>
+    </footer>
+
+    <div id="notifications-container" class="notifications-container"></div>
+
+    <script src="notifications.js"></script>
+    <script src="landing.js"></script>
+</body>
+</html>
